@@ -1,0 +1,60 @@
+<%- include("header") -%>
+
+<script>
+  function validateForm() {
+    var newItemInput = document.getElementById('newItem');
+    if (newItemInput.value.trim() === '') {
+      alert('Please enter a non-empty task.');
+      return false;
+    }
+
+    // Check for duplicates before submitting to the server
+    var existingItems = document.querySelectorAll('.item p');
+    for (var i = 0; i < existingItems.length; i++) {
+      if (existingItems[i].innerText === newItemInput.value.trim()) {
+        alert('Cannot add two items with the same task.');
+        return false;
+      }
+    }
+
+    return true;
+  }
+  function searchTasks() {
+    var input = document.getElementById('searchInput');
+    var filter = input.value.toLowerCase();
+    var items = document.querySelectorAll('.item');
+
+    for (var i = 0; i < items.length; i++) {
+      var text = items[i].querySelector('p').innerText.toLowerCase();
+      items[i].style.display = text.includes(filter) ? 'block' : 'none';
+    }
+  }
+</script>
+
+<div class="box" id="heading">
+  <h1> <%= listTitle %> </h1>
+</div>
+
+
+<div class="box">
+  <input type="text" id="searchInput" class="search-input" placeholder="Search Task" onkeyup="searchTasks()">
+  <% newListItems.forEach(function(x) { %>
+    <form action="/delete" method="post">
+      <div class="item-container">
+        <div class="item">
+          <input type="checkbox" name="checkbox" value="<%= x._id %>" onChange="this.form.submit()">
+          <p><%= x.name %></p>
+        </div>
+        <p class="faded-text">Priority: <%= x.priority %></p>
+      </div>
+      <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+    </form>
+    <% }) %>
+  <form class="item" action="/" method="post" onsubmit="return validateForm();">
+    <input type="text" id="newItem" name="newItem" placeholder="New Item" autocomplete="off">
+    <input class="priority-input" type="number" name="priority" placeholder="Priority" required style="border: none;">
+    <button type="submit" name="list" value="<%= listTitle %>" class="add-button">+</button>
+  </form>
+</div>
+
+<%- include("footer") -%>
