@@ -14,8 +14,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 const password = encodeURIComponent("hHJwj1EAMu64cOlT");
-mongoose.connect("mongodb+srv://admin_todolist:" + password + "@ToDoList.iwcwkms.mongodb.net/todolistDB", { useNewUrlParser: true });
-
+// mongoose.connect("mongodb+srv://admin_todolist:" + password + "@ToDoList.iwcwkms.mongodb.net/todolistDB", { useNewUrlParser: true });
+mongoose.connect("mongodb+srv://admin_todolist:" + password + "@todolist.xrvpf8e.mongodb.net", { useNewUrlParser: true });
 
 const itemSchema = new mongoose.Schema({
   name: String,
